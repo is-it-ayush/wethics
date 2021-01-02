@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from django.urls.conf import path
@@ -122,6 +123,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 # I get it
+STATIC_ROOT = [BASE_DIR / 'staticfiles',]
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
