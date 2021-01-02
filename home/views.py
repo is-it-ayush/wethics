@@ -5,14 +5,19 @@ from typing import List
 from django.http import response
 from django.http.response import HttpResponse, HttpResponseGone
 from django.shortcuts import render 
+from django.contrib.gis.geoip2 import GeoIP2
 # Create your views here.
 import requests
 import datetime, time
-
+import geoip2.webservice
 
 def home(request):
+    g = GeoIP2()
+    ip  = get_client_ip(request)
+    city = g.city(ip)
+    country = g.country_code(ip)
     #weather api url
-    url = 'https://api.weatherapi.com/v1/current.json?key=d5d9fd8eaaab4ee8be5162449210201&q=' + request.ipinfo.city
+    url = 'https://api.weatherapi.com/v1/current.json?key=d5d9fd8eaaab4ee8be5162449210201&q=' + city
     #Response Object
     response = requests.get(url).json()
     #temperature variable
@@ -20,24 +25,32 @@ def home(request):
     #last updated temperature varible
     lst_updt = response['current']['last_updated']
     
-    return render(request, 'index.html',{'location': request.ipinfo.city + ", " + request.ipinfo.country, 'temperature' : temp_convert_to_c(temp), 'weather':  response['current']['condition']['text'], 'bgurl': bgimg(), 'last_updated': lastupdated(lst_updt)})
+    return render(request, 'index.html',{'location': city + ", " + country, 'temperature' : temp_convert_to_c(temp), 'weather':  response['current']['condition']['text'], 'bgurl': bgimg(), 'last_updated': lastupdated(lst_updt)})
 
 
 
 def forecast(request):
+    g = GeoIP2()
+    ip  = get_client_ip(request)
+    city = g.city(ip)
+    country = g.country_code(ip)
     #weather api url
     # 09f2b33e311b403386d52c018ec8bbae
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + request.ipinfo.city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + request.ipinfo.country + "&postal_code=" + request.ipinfo.postal + "&lang=en" + "&days=16"
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + country + "&lang=en" + "&days=16"
     #Response Object
     response = requests.get(url).json()
     #Date Part Monday 23
     forecast = response['data']
-    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': request.ipinfo.city + ", " + request.ipinfo.country})
+    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': response.city.name + ", " + country})
 
 
 def today(request):
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + request.ipinfo.city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + request.ipinfo.country + "&postal_code=" + request.ipinfo.postal + "&lang=en" + "&days=1"
-    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' '&city=' + request.ipinfo.city + '&country=' + request.ipinfo.country + '&key=b7ab2955200341809f383396cc34e944' + "&lang=en"
+    g = GeoIP2()
+    ip  = get_client_ip(request)
+    city = g.city(ip)
+    country = g.country_code(ip)
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + country  + "&lang=en" + "&days=1"
+    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' '&city=' + city + '&country=' + country + '&key=b7ab2955200341809f383396cc34e944' + "&lang=en"
     #Response Object
     response = requests.get(url).json()
     aqires = requests.get(aqiurl).json()
@@ -74,7 +87,7 @@ def today(request):
     aqi = aqid['aqi']
 
 
-    url = 'https://api.weatherapi.com/v1/forecast.json?key=d5d9fd8eaaab4ee8be5162449210201&q=' + request.ipinfo.city + '&days=1'
+    url = 'https://api.weatherapi.com/v1/forecast.json?key=d5d9fd8eaaab4ee8be5162449210201&q=' + city + '&days=1'
     response = requests.get(url).json()
 
     data = response['forecast']['forecastday'][0]['hour']
@@ -93,7 +106,7 @@ def today(request):
 
     return render(request, 'today.html',{
         'bgurl': bgimg(),
-        'location': request.ipinfo.city + ", " + request.ipinfo.country, 
+        'location': city + ", " + country, 
 
         'th': temp_convert_to_c(temp_high),
         'tl': temp_convert_to_c(temp_low),
@@ -190,3 +203,12 @@ def lastupdated(lst_updt):
        return str(int(x[0])-12)+":"+x[1]+" P.M."
     elif int(x[0])<12:
        return str(int(x[0])-12)+":"+x[1]+" A.M."
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

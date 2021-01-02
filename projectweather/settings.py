@@ -28,7 +28,7 @@ SECRET_KEY = '!(#b@ktruer$twx79-xn$m3c3di!4qz67=hnpwrr)fo^bq#13j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ayushweather.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['ayushweather.herokuapp.com','127.0.0.1','*']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
+    'geoip2',
 ]
 
 MIDDLEWARE = [
@@ -126,7 +127,7 @@ USE_TZ = True
 STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
 
-
+GEOIP_PATH = BASE_DIR / 'databases'
 
 IPINFO_TOKEN = '912338ac8f0e8b'
 IPINFO_SETTINGS = {
