@@ -14,8 +14,8 @@ import geoip2.webservice
 def home(request):
     g = GeoIP2()
     ip  = get_client_ip(request)
-    city = g.city(ip)
-    country = g.country_code(ip)
+    city = g.city(ip)['city']
+    country = g.country_code(ip)['country_code']
     #weather api url
     url = 'https://api.weatherapi.com/v1/current.json?key=d5d9fd8eaaab4ee8be5162449210201&q=' + city
     #Response Object
@@ -32,8 +32,8 @@ def home(request):
 def forecast(request):
     g = GeoIP2()
     ip  = get_client_ip(request)
-    city = g.city(ip)
-    country = g.country_code(ip)
+    city = g.city(ip)['city']
+    country = g.country_code(ip)['country_code']
     #weather api url
     # 09f2b33e311b403386d52c018ec8bbae
     url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + country + "&lang=en" + "&days=16"
@@ -41,14 +41,14 @@ def forecast(request):
     response = requests.get(url).json()
     #Date Part Monday 23
     forecast = response['data']
-    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': response.city.name + ", " + country})
+    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': city + ", " + country})
 
 
 def today(request):
     g = GeoIP2()
     ip  = get_client_ip(request)
-    city = g.city(ip)
-    country = g.country_code(ip)
+    city = g.city(ip)['city']
+    country = g.country_code(ip)['country_code']
     url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + country  + "&lang=en" + "&days=1"
     aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' '&city=' + city + '&country=' + country + '&key=b7ab2955200341809f383396cc34e944' + "&lang=en"
     #Response Object
