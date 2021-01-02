@@ -224,7 +224,18 @@ body
         font-size: 13px;  
         font-weight: 400;
     }
- 
+    .center h1
+    {
+        
+        font-size: 25px;  
+        text-align: center;
+    }
+
+.center h3
+    {   
+        font-size: 13px;  
+        font-weight: 400;
+    }
 
     .bottom
     {

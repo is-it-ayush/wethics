@@ -9,6 +9,10 @@ from django.contrib.gis.geoip2 import GeoIP2
 # Create your views here.
 import requests
 
+def ren404(request):
+    return render(request,'404.html',{'bgurl': bgimg()})
+
+
 def home(request):
     g = GeoIP2()
     ip  = get_client_ip(request)
