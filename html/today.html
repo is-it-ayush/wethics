@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+{% load static %}
+{% load tags %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forecast</title>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/today.css' %}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta name="description" content="Weather App By Ayush">
+    <meta name="keywords" content="weather, app, latest, weather, ayush, tech, environment">
+    <meta name="author" content="Ayush Gupta">
+</head>
+
+<body id="bod" style="background-image: url('../static/images/desktop/backgroud-images/overlay.png'), url('{{bgurl}}')">
+    <div id="overlay-layer"></div>
+    <div>
+        <div class="top" id="unselectable">
+            <div class="top-left">
+                <h4 id="rm-and">Hi, currently its</h4><h4 id="time"></h4>
+            </div>
+            <div class="top-center">
+                <h3>Today</h3>
+                <h6>powered by <a href="https://www.weatherapi.com/">weatherapi.com</a></h6>
+            </div>
+            <div class="top-right">
+                <h3>{{location}}</h3>
+            </div>
+        </div>
+        
+        <div class="dashboard dragscroll"  id="unselectable">
+            <div class="content">
+                <div class="leftdata">
+                    <div class="t-box">
+                        <h4 >Temperature</h4>
+                            <div class="box" >
+                                <img src="{% static 'images/common/todayico/temp.svg' %}">
+                                <div class="tempgrid">
+                                    <h2>{{th}}</h2>
+                                    <h5>{{tl}}</h5>
+                                </div>
+                                <h5 id="feelslikestemp">Feels Like: {{fl}}</h5>
+                            </div>
+                    </div>
+                    <div class="v-box " >
+                        <h4 >Visibility</h4>
+                        <div  class="box">
+                            <img src="{% static 'images/common/todayico/visibility.svg' %}">
+                            <h5 id="visibility">Visibility: {{vis}} km</h5>
+                        </div>  
+                    </div>
+                </div>
+
+                <div class="rightdata" >
+                    <div class="w-box ">
+                        <h4>Wind</h4>
+                            <div class="box" >
+                                <img src="{% static 'images/common/todayico/windspeed.svg' %}">
+                                <div class="tempgrid">
+                                    <h2>{{ws}} km/h</h2>
+                                    <div class="gust">
+                                        <h6>Gust:</h5>
+                                        <h5>{{gs}} km/h</h5>
+                                    </div>
+                                </div>
+                                <div class="winddiranddeg">
+                                <h3 id="winddirection">{{wdi}}</h5>
+                                <h5 id="winddegree">{{wde}}</h5>
+                                </div>
+                            </div>
+                    </div>
+                    <div id="handpre">
+                        <div class="humidbox ">
+                            <h4>Humidity</h4>
+                            <div class="box">
+                                <div style="display: grid;">
+                                <img id="himg" src="{% static 'images/common/todayico/humidity.svg' %}">
+                                <h4>{{hum}}%</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="prebox " >
+                            <h4  >Precipitation</h4>
+                            <div class="box" >
+                                <div style="display: grid;">
+                                <img id="pimg" src="{% static 'images/common/todayico/preci.svg' %}">
+                                <h4>{{pre}} mm</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="cbox2">
+                <div class="centerbox" id="unselectable">
+                    <div class="container">
+                        <ul>
+                            <li><h4>{{day|onlyweekday}}</h4></li>
+                            <li><h1>{{date}}</h1></li>
+                            <li><h4>{{month}}, {{year}}</h4></li>
+                        </ul>
+                        <div class="aqiand">
+                            <ul>
+                                <li><h4>{{aqi}} --</h2></li>
+                                <li><h4>{{aqi_text}}</h4></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="aqibox"  id="unselectable">
+                <h4 >Air Quality Index</h4>
+                <div class="box">
+                    <div class="aqidatacenter">
+                        <ul>
+                            <li><h2>{{aqi}}</h2></li>
+                            <li><h4 style="color: '{{aqi_text_color}}'">{{aqi_text}}</h4></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="h-box" id="unselectable">
+            <div class="box">
+                <div id="chartdiv"></div>
+            </div>
+        </div>
+        </div>
+        
+        
+
+
+        <div class="centerbox" id="unselectable">
+            <div class="container">
+                <ul>
+                    <li><h4>{{day|onlyweekday}}</h4></li>
+                    <li><h1>{{date}}</h1></li>
+                    <li><h4>{{month}}, {{year}}</h4></li>
+                </ul>
+                <div class="aqiand">
+                    <ul>
+                        <li><h4>{{aqi}} --</h2></li>
+                        <li><h4>{{aqi_text}}</h4></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+       
+        
+
+
+
+
+        <div class="bottom" id="unselectable">
+            <h4>Delevoped By <a href="https://github.com/is-it-ayush">Ayush</a> ❤️</h4>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="{% static 'js/dragscroll.js' %}"></script>
+    <script src="{% static 'js/datetime.js' %}"></script>
+
+    <script>
+
+google.charts.load('current', {'packages':['line']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'Hour');
+    data.addColumn('number', 'Temperature');
+    data.addColumn('number', 'Dew Point');
+    data.addRows(JSON.parse('{{cd|safe}}'));
+
+    var options = {
+        colors: ['#fdd835','#1e88e5'],
+        backgroundColor: "transparent",
+        chartArea: {
+            backgroundColor: 'transparent',
+            top: 20,
+        },
+        width: 1000,
+        height: 140,
+        legend: {position: 'none'},
+        animation:{
+            duration: 1000,
+            easing: 'inAndOut'
+          },
+        hAxis: {
+            textStyle: {
+              color: "#FFFFFF",
+              bold: true,
+            },
+            gridlines: {
+              color: "#FFFFFF00"
+            },
+            baselineColor: '#FFFFFF00'
+          },
+        vAxis: {
+            textStyle: {
+              color: "#FFFFFF",
+              bold: true,
+            },
+            gridlines: {
+              color: "#FFFFFF00"
+            },
+            baselineColor: '#FFFFFF00'
+          },
+    };
+
+    var chart = new google.charts.Line(document.getElementById('chartdiv'));
+    chart.draw(data, google.charts.Line.convertOptions(options));
+}
+        
+        
+    </script>
+
+</body>
+
+</html>

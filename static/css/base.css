@@ -1,0 +1,234 @@
+/* I will import the font from Google Fonts CDN, just to reduce page size..*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+*{
+    font-family: 'Poppins',sans-serif; /* Fallback font is necessary since GOOGLE SUCKS.. */
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    padding: 0; /* this will set padding and margint of every element to be zero since by default every tag has some margin and padding */
+
+}
+body
+{
+     /* THIS SHIT DUMB, I TYPE exactly same again and it worked wtf...*/
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden !important;
+}
+
+/*    */
+#overlay-layer
+{
+    background-color: rgba(0, 0, 0, 0.4); 
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    transition: 0.5s ease;
+}
+
+.bottom
+{
+    vertical-align: bottom;
+    margin-bottom: 10px;
+    bottom: 0;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-weight: 400;   
+}
+.bottom a
+{
+    color: white;
+    text-decoration: none;
+}
+
+
+#unselectable
+{
+    /* Making text unselectable and increasing its compatibility with old and new browsers */
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+
+/*---------------------Top Layer--------------------*/
+.top
+{
+    top: 0;
+    width: 100vw;
+    vertical-align: top;
+    margin: 8px;
+    padding: 5px;
+    position: absolute;
+    font-size: 20px;
+}
+.top-center
+{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.top-center h3
+{
+    font-size: 28px;
+    text-align: center;
+}
+
+
+.top-center h6 a
+{
+    outline: 0;
+    text-decoration: none;
+    color: rgba(90, 175, 90, 0.63);
+}
+
+.top-left
+{
+    float: left;
+    display: inline-flex;
+}
+#time
+{
+    margin-left: 10px;
+}
+.top-right
+{
+    
+    float: right;
+    margin-right: 20px;
+}
+/*------------------------------------------------------------*/
+
+
+/*-------------------------Mid layer--------------------------*/
+.center
+{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: absolute;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.center h3
+{
+    text-align: center;
+}
+.center h4
+{
+    text-align: center;
+    font-size: 20px;
+}
+.center h5
+{
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.redir
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 100vw;
+}
+
+#forecast
+{
+    transform: rotate(-90deg);
+    margin-left: 5px;
+    padding: 10px;
+    float: left;
+    font-size: 20px;
+    transition: 0.5s ease;
+}
+
+#forecast a
+{
+    text-decoration: none;
+    color: white;
+}
+
+#forecast:hover
+{
+    transition: 0.5s ease;
+    font-size: 23px;
+}
+
+#t-info
+{
+    padding: 10px;
+    transform: rotate(90deg);
+    float: right;
+    margin-right: 5px;
+    font-size: 20px;
+}
+#t-info a
+{
+ 
+    text-decoration: none;
+    color: white;
+}
+
+#t-info:hover
+{
+    transition: 0.5s ease;
+    font-size: 23px;
+}
+
+/*------------------------------------------------------------*/
+@media only screen and (max-width: 767px)
+{
+    *{
+        color: white;
+    }
+    body 
+    {
+        background-image: url('../images/mobile/background-images/bg-sunset.jpg') !important;  /* There is no api to fetch the latest image of the day at android/iphone scale hence it will be a permanent image :( */
+        background-color: black;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100vh;
+        width: 100vw;
+    }
+    .top-center
+    {
+        display: none;
+    }
+    .top-right
+    {
+        display: none;
+    }
+
+    .center
+    {
+        font-size: 30px;
+    }
+    .center h5
+    {
+        font-size: 13px;  
+        font-weight: 400;
+    }
+    .redir
+    {
+        
+    }
+
+    .bottom
+    {
+        font-size: 15px;
+        outline: none;
+    }
+}
+
+/* I am using  {{}} becuase these are actually dynamic variables and will change .....so hence i am declaring their poistion and {{}} is just a placeholder*/

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Weather App</title>  
+        <link href= "{% static 'css/base.css' %}"  rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <meta name="description" content="Weather App By Ayush">
+        <meta name="keywords" content="weather, app, latest, weather, ayush, tech, environment">
+        <meta name="author" content="Ayush Gupta">
+    </head> 
+        <body style="background-image: url('../static/images/desktop/backgroud-images/overlay.png'), url('{{bgurl}}')">
+        <div id="overlay-layer"></div>
+        <div>
+            <div class="top" id="unselectable">
+                <div class="top-left">
+                    <h4>Hi, its</h4>
+                    <h4 id="time"></h3>  <!--Will update time via backend! :)-->
+                </div>
+                <div class="top-center">
+                    <h3>Weather App</h3>
+                    <h6>powered by <a href="https://www.weatherapi.com/">weatherapi.com</a></h6>
+                </div>
+                <div class="top-right">
+                    <h3>{{location}}</h3>
+                </div>
+            </div>
+            
+            <div class="center" id="unselectable">
+                <h3>{{temperature}}</h3>
+                <h4>{{weather}}</h4>
+                <h5>Updated as of {{last_updated}}</h5>
+            </div>
+
+            <div class="redir" id="unselectable">
+                <h4 id="forecast"><a href="/forecast">Forecast</a></h4>
+                <h4 id="t-info"><a href="/today">Today</a></h4>
+            </div>
+
+            <div class="bottom" id="unselectable">
+                <h4>Delevoped By <a href="https://github.com/is-it-ayush">Ayush</a> ❤️</h4>
+            </div>
+        </div>
+
+        <script src="{% static 'js/datetime.js' %}"></script>
+    </body>
+</html>

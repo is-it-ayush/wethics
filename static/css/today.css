@@ -1,0 +1,407 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    
+    overflow-y: scroll;
+}
+.dashboard
+{
+    
+    overflow-y: scroll;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 90vw;
+    height: 80vh;
+}
+
+
+::-webkit-scrollbar
+{
+    background-color: transparent;
+}
+.cbox2
+{
+    display: none;
+}
+.centerbox
+{
+  width: max-content;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.centerbox ul
+{
+    list-style-type: none;
+}
+
+#unselectable
+{
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+.t-box
+{
+    margin: 10px;
+    margin-top: 20px;
+    width: max-content;
+    height: max-content;
+}
+.box 
+{
+    /* The blur part*/
+    display: inline-flex;
+    background-color: rgba(255, 255, 255, 0.2);  
+    margin: 10px 0px 0px 0px;
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    padding: 20px;
+    width: max-content;
+    height: max-content;
+}
+
+
+
+.t-box img
+{
+    padding-right: 10px;
+    width: max-content;
+    height: max-content;
+}
+.tempgrid
+{
+    display: grid;
+    margin: 15px;
+    height: max-content;
+    width: max-content;
+}
+
+#feelslikestemp
+{
+    height: max-content;
+    width: max-content;
+    padding-top: 40px;
+    padding-left: 10px;
+}
+
+.v-box
+{
+    margin: 10px;
+    margin-top: 20px;
+    width: max-content;
+    height: max-content;
+}
+#visibility
+{
+    position: relative;
+    padding-left: 1vw;
+    padding-top: 2vh;
+    padding-right: 1vw;
+    padding-bottom: 2vh;
+}
+
+.v-box img
+{
+    padding-right: 10px;
+}
+
+.h-box
+{
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    margin: 10px;
+    margin-top: 25px;
+    width: max-content;
+    height: max-content;
+    position: relative;
+}
+
+#chartdiv
+{
+    padding: 10px;
+}
+
+
+
+.leftdata
+{
+    float: left;
+    width: max-content;
+}
+.rightdata
+{
+    float: right;
+    width: max-content;
+    margin-top: 10px;
+}
+
+.w-box
+{
+    
+    margin: 10px;
+    width: max-content;
+    height: max-content; 
+}
+
+.w-box img
+{
+    padding-right: 10px;
+    margin-top: 25px;
+    height: 48px;
+    width: 48px;
+}
+.gust
+{
+    margin-top: 5px;
+}
+
+.winddiranddeg
+{
+    margin: 15px 0px 0px 20px;
+    display: block;
+    text-align: center;
+}
+#winddirection
+{
+    font-size: 25px;
+}
+#winddegree
+{
+    margin-top: 4px;
+}
+
+
+
+.humidbox
+{
+    float: left;
+    display: grid;
+}
+.prebox
+{
+    float: right;
+    display: grid;
+}
+
+#himg,#pimg
+{
+    height: 64px;
+    width: 64px;
+}
+.prebox h4,.humidbox h4
+{
+    margin-top: 10px;
+    text-align: center;
+}
+
+
+.aqibox
+{
+    margin: 10px;
+    margin-top: 30px;
+    width: max-content;
+}
+.aqibox h4
+{
+    margin: 0;
+    padding: 0;
+    width: max-content;
+    height: max-content;
+}
+
+.aqibox ul
+{
+    list-style-type: none;
+    margin: 0px 10px 0px 10px;
+}
+
+.aqibox ul li
+{
+    text-align: center;
+}
+
+.aqidatacenter
+{
+    margin: 5px;
+    margin-top: 10px;
+}
+.aqiand
+{
+    display: none;
+}
+
+/*------------------------------------------------------------*/
+@media only screen and (max-width: 767px)
+{
+    .dashboard{
+        
+        overflow-x: hidden;
+        overflow-y: scroll;
+    
+    }
+    
+    .top
+    {
+        display: none;
+    }
+
+    .cbox2
+    {
+        display: none;
+    }
+
+    .centerbox
+    {
+        top: 5vh;
+        margin: 8px;
+        padding: 3px;
+    }
+    .centerbox ul
+    {
+        display: inline-flex;
+    }
+    .centerbox ul li
+    {
+        padding: 1vw;
+    }
+    .centerbox h4
+    { 
+        font-size: medium;
+        width: max-content;
+    }
+    .centerbox h1
+    {
+        
+        font-size: medium;
+        width: max-content;
+    }
+    
+    .content
+    {
+        display: grid;
+    }
+    .leftdata
+    {
+        margin-top: 20px;
+    }
+    .rightdata
+    {
+        margin-top: 20px;
+    }
+    .h-box
+    {
+        display: none;
+    }
+
+    .aqibox 
+    {
+        display: none;
+    }
+
+    .container
+    {
+        display: grid;
+    }
+    .aqiand
+    {
+        display: inline;
+    }
+    ::-webkit-scrollbar
+    {
+        background-color: transparent;
+    }
+    #handpre
+    {
+        display: inline-flex;
+    }
+    .prebox
+    {
+        margin-left: 10vw;
+    }
+
+    .h-box
+    {
+        display: none;
+    }
+    
+}
+@media only screen and (max-width: 950px) and (min-width: 768px)
+{
+    .dashboard{
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    #rm-and 
+    {
+     display: none;
+    }
+
+    .top
+    {
+        display: none;
+    }
+
+    .centerbox
+    {
+        top: 3vh;
+        margin: 3vh;
+        padding: 5px;
+    }
+    .centerbox ul
+    {
+        display: inline-flex;
+    }
+    .centerbox ul li
+    {
+        padding: 1vw;
+    }
+    .centerbox h4
+    {
+        
+        font-size: medium;
+    width: max-content;
+    }
+    .centerbox h1
+    {
+        
+        font-size: medium;
+        width: max-content;
+    }
+
+    .aqibox 
+    {
+        display: none;
+    }
+    .container
+    {
+        display: grid;
+    }
+    .aqiand
+    {
+        display: inline;
+    }
+    ::-webkit-scrollbar
+    {
+    background-color: transparent;
+    }
+    #handpre
+    {
+        display: inline-flex;
+    }
+    .prebox
+    {
+        margin-left: 5vw;
+    }
+
+    .h-box
+    {
+        display: none;
+    }
+}

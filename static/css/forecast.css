@@ -1,0 +1,99 @@
+.cards-container
+{
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    display: inline-flex;
+    perspective: 1000;
+    cursor: grab;
+    overflow-x: scroll;
+    width: 100vw;
+}
+
+.container
+{
+    padding: 20px;
+}
+
+
+.card
+{
+    margin: 20px;
+    background-color: rgba(0,0,0, 0.7);
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, .15);  
+    backdrop-filter: blur(5px);
+}
+.cardinfo
+{
+    transform-style: preserve-3d;
+    width: 200px;
+    height: 330px;
+    text-align: center;
+    box-sizing: border-box;
+}
+.card h3
+{
+    padding: 5px;
+}
+
+.card img
+{
+    padding: 10px;
+}
+
+#temp_high
+{
+    font-size: 20px;
+}
+#temp_low
+{
+    font-size: 15px;
+}
+
+.data
+{
+    display: grid;
+    position: absolute;
+}
+.windspeed
+{
+    display: inline-flex;
+}
+.windspeed h6
+{
+    margin-top: 9px;
+}
+#wind_data
+{
+    margin-left: 30px;
+}
+
+.humidity
+{
+    display: inline-flex;
+}
+.humidity h6
+{
+    margin-left: 3px;
+    margin-top: 9px;
+}
+#humid_data
+{
+    margin-left: 40px;
+}
+
+.unselectable
+{
+    user-select: none;
+    -moz-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+
+::-webkit-scrollbar
+{
+    background-color: transparent;
+}

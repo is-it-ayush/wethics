@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="17.637" height="16" viewBox="0 0 17.637 16">
+  <g id="windspeed" transform="translate(0 -32)">
+    <g id="Group_6" data-name="Group 6" transform="translate(0 32.842)">
+      <g id="Group_5" data-name="Group 5">
+        <path id="Path_7" data-name="Path 7" d="M14.186,48a3.636,3.636,0,0,0-3.451,3.789.385.385,0,1,0,.767,0,2.828,2.828,0,0,1,2.684-2.947,2.96,2.96,0,0,1,0,5.895H.383a.423.423,0,0,0,0,.842h13.8a3.806,3.806,0,0,0,0-7.579Z" transform="translate(0 -48)" fill="#fff"/>
+      </g>
+    </g>
+    <g id="Group_8" data-name="Group 8" transform="translate(0 32)">
+      <g id="Group_7" data-name="Group 7" transform="translate(0 0)">
+        <path id="Path_8" data-name="Path 8" d="M6.9,32a2.828,2.828,0,0,0-2.684,2.947.385.385,0,1,0,.767,0A2.02,2.02,0,0,1,6.9,32.842a2.115,2.115,0,0,1,0,4.211H.383a.423.423,0,0,0,0,.842H6.9A2.96,2.96,0,0,0,6.9,32Z" transform="translate(0 -32)" fill="#fff"/>
+      </g>
+    </g>
+    <g id="Group_10" data-name="Group 10" transform="translate(0 42.105)">
+      <g id="Group_9" data-name="Group 9">
+        <path id="Path_9" data-name="Path 9" d="M13.419,224H.383a.423.423,0,0,0,0,.842H13.419a2.114,2.114,0,0,1,0,4.211,2.02,2.02,0,0,1-1.917-2.105.385.385,0,1,0-.767,0,2.828,2.828,0,0,0,2.684,2.947,2.96,2.96,0,0,0,0-5.895Z" transform="translate(0 -224)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>
