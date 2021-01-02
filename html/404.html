@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>404</title>  
+        <link href= "{% static 'css/base.css' %}"  rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <meta name="description" content="Weather App By Ayush">
+        <meta name="keywords" content="weather, app, latest, weather, ayush, tech, environment">
+        <meta name="author" content="Ayush Gupta">
+    </head> 
+        <body style="background-image: url('../static/images/desktop/backgroud-images/overlay.png'), url('{{bgurl}}')">
+        <div id="overlay-layer"></div>
+        <div>
+            <div class="top" id="unselectable">
+                <div class="top-left">
+                    <h4>Hi, its</h4>
+                    <h4 id="time"></h3>  <!--Will update time via backend! :)-->
+                </div>
+                
+            </div>
+            
+            <div class="center" id="unselectable">
+                <h1>404</h1>
+                <h3>Simon says, "Page Not Found!"</h3>
+            </div>
+
+            <div class="redir" id="unselectable">
+                <h4 id="forecast"><a href="https://ayushgupta.ga">Weather Home</a></h4>
+                <h4 id="t-info"><a href="https://ayushweather.herokuapp.com">My Website</a></h4>
+            </div>
+
+        </div>
+
+        <script src="{% static 'js/datetime.js' %}"></script>
+    </body>
+</html>

@@ -8,8 +8,6 @@ from django.shortcuts import render
 from django.contrib.gis.geoip2 import GeoIP2
 # Create your views here.
 import requests
-import datetime, time
-import geoip2.webservice
 
 def home(request):
     g = GeoIP2()

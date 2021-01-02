@@ -119,6 +119,11 @@ body
     font-weight: 700;
 }
 
+.center h1
+{
+    text-align: center;
+}
+
 .center h3
 {
     text-align: center;
@@ -219,10 +224,7 @@ body
         font-size: 13px;  
         font-weight: 400;
     }
-    .redir
-    {
-        
-    }
+ 
 
     .bottom
     {

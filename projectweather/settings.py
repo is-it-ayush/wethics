@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '!(#b@ktruer$twx79-xn$m3c3di!4qz67=hnpwrr)fo^bq#13j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['ayushweather.herokuapp.com','127.0.0.1','*']
 
