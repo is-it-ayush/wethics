@@ -27,7 +27,7 @@ def home(request):
 def forecast(request):
     #weather api url
     # 09f2b33e311b403386d52c018ec8bbae
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + request.ipinfo.city + "&key=09f2b33e311b403386d52c018ec8bbae" + "&country=" + request.ipinfo.country + "&postal_code=" + request.ipinfo.postal + "&lang=en" + "&days=16"
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + request.ipinfo.city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + request.ipinfo.country + "&postal_code=" + request.ipinfo.postal + "&lang=en" + "&days=16"
     #Response Object
     response = requests.get(url).json()
     #Date Part Monday 23
@@ -36,8 +36,8 @@ def forecast(request):
 
 
 def today(request):
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + request.ipinfo.city + "&key=09f2b33e311b403386d52c018ec8bbae" + "&country=" + request.ipinfo.country + "&postal_code=" + request.ipinfo.postal + "&lang=en" + "&days=1"
-    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' '&city=' + request.ipinfo.city + '&country=' + request.ipinfo.country + '&key=09f2b33e311b403386d52c018ec8bbae' + "&lang=en"
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + request.ipinfo.city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + request.ipinfo.country + "&postal_code=" + request.ipinfo.postal + "&lang=en" + "&days=1"
+    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' '&city=' + request.ipinfo.city + '&country=' + request.ipinfo.country + '&key=b7ab2955200341809f383396cc34e944' + "&lang=en"
     #Response Object
     response = requests.get(url).json()
     aqires = requests.get(aqiurl).json()
