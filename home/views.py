@@ -56,6 +56,7 @@ def today(request):
     #Response Object
     response = requests.get(url).json()
     aqires = requests.get(aqiurl).json()
+    print(aqires)
     #Getting 'data' feild of the objects
     forecast = response['data'][0]
     aqid = aqires['data'][0]
