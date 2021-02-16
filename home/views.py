@@ -58,7 +58,7 @@ def today(request):
     aqires = requests.get(aqiurl).json()
     #Getting 'data' feild of the objects
     forecast = response['data'][0]
-    if aqires.status_code != 200:
+    if requests.get(aqiurl).status_code != 200:
         ren404(request)
     aqid = aqires['data'][0]
 
