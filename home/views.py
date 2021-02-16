@@ -52,7 +52,7 @@ def today(request):
     city = g.city(ip)['city']
     country = g.country_code(ip)
     url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=b7ab2955200341809f383396cc34e944" + "&country=" + country  + "&lang=en" + "&days=1"
-    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' '&city=' + city + '&country=' + country + '&key=b7ab2955200341809f383396cc34e944' + "&lang=en"
+    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' + '&city=' + city + '&country=' + country + '&key=b7ab2955200341809f383396cc34e944' + "&lang=en"
     #Response Object
     response = requests.get(url).json()
     aqires = requests.get(aqiurl).json()
