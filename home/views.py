@@ -38,7 +38,7 @@ def forecast(request):
     country = g.country_code(ip)
     #weather api url
     # 09f2b33e311b403386d52c018ec8bbae
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=60db47f356f042f4b912772a49aa1c7a" + "&country=" + country + "&lang=en" + "&days=16"
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
     #Response Object
     response = requests.get(url).json()
     #Date Part Monday 23
@@ -51,8 +51,8 @@ def today(request):
     ip  = get_client_ip(request)
     city = g.city(ip)['city']
     country = g.country_code(ip)
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=60db47f356f042f4b912772a49aa1c7a" + "&country=" + country  + "&lang=en" + "&days=1"
-    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' + '&city=' + city + '&country=' + country + '&key=60db47f356f042f4b912772a49aa1c7a' + "&lang=en"
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country  + "&lang=en" + "&days=1"
+    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' + '&city=' + city + '&country=' + country + '&key=15b6cc7dd80e4efbbd317566c35fa74a' + "&lang=en"
     #Response Object
     response = requests.get(url).json()
     aqires = requests.get(aqiurl).json()
