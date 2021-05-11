@@ -12,7 +12,7 @@ def weekday(date):
 
 @register.filter
 def onlyweekday(date):
-    arraydate = date.split('-')
+    arraydate = date
     da = datetime.date(int(arraydate[0]),int(arraydate[1]),int(arraydate[2]))
     weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
     return str(weekdays[da.weekday()])
