@@ -69,3 +69,4 @@ whitenoise==5.2.0
 wrapt==1.12.1
 yarl==1.6.3
 zipp==3.4.1
+ip2geotools=0.1.5
