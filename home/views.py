@@ -36,11 +36,9 @@ def home(request):
         g = GeoIP2()
         ip  = get_client_ip(request)
         udata = DbIpCity.get(ip, api_key='free')
-        break
     except:
         print("Oopsie! Crashed @home/geoIP2()")
         ren404(request)
-        break
     
     response = getJSONdata([udata.latitude,udata.longitude],["temperature","weatherCode"],"metric","current")
 
