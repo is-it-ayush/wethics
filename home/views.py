@@ -54,7 +54,7 @@ def home(request):
 
 def forecast(request):
     g = GeoIP2()
-    ip  = get_client_ip(request)d
+    ip  = get_client_ip(request)
     city = g.city(ip)['city']
     country = g.country_code(ip)
 
