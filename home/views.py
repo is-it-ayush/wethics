@@ -26,7 +26,6 @@ def getJSONdata(l,p,u,t):
     for i in p:
         fstring+= str(i)+","
     finalUrl=baseURL+"location="+str(location[0])+","+str(location[1])+"&"+"fields="+fstring+"&timesteps="+timesteps+"&units="+units+"&apikey="+apikey
-    print(finalUrl)
     response = requests.get(finalUrl).json()
     return response
 
@@ -38,7 +37,6 @@ def home(request):
 
     
     response = getJSONdata([str(udata.latitude),str(udata.longitude)],["temperature","weatherCode"],"metric","current")
-    print(response)
 
     #temperature variable
     temp = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
@@ -49,7 +47,7 @@ def home(request):
     wText = str(weathercode(wcode))
 
     #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
-    return render(request, 'index.html',{'location': udata.city + ", " + udata.country, 'temperature' : temp, 'weather':  wText, 'bgurl': bgimg(), 'last_updated': lastupdated(lst_updt)})
+    return render(request, 'index.html',{'location': udata.city + ", " + udata.country, 'temperature' : temp_convert_to_c(temp), 'weather':  wText, 'bgurl': bgimg(), 'last_updated': lastupdated(lst_updt)})
     #------------------------------------------------------------------------------------------------------
 
 
@@ -58,7 +56,7 @@ def forecast(request):
 
 
     #g = GeoIP2()
-    #ip  = get_client_ip(request)
+    #ip  = get_client_ip(request)d
     #city = g.city(ip)['city']
     #country = g.country_code(ip)
 
@@ -233,12 +231,10 @@ def bgimg():
 
 def lastupdated(lst_updt):
     #2019-03-20T14:09:50Z
-    f = "2019-03-20T14:09:50Z".split("T")
+    f = lst_updt.split("T")
     f = f[1]
     f = f[:len(f)-4]
     f = f.split(":")
-    if int(f[0])>=12:
-        f[0]=str(int(f[0])-12)
     fTime = f[0]+":"+f[1]
     return fTime
 
