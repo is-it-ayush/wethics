@@ -95,7 +95,7 @@ def today(request):
     #Wind Date
     wind_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windSpeed'])
     gust_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windGust'])
-    wind_direction = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windDirection'])
+    wind_direction = str(response["data"]["timelines"][0]["intervals"][0]["values"]['windDirection'])+"°"
 
 
     #Visibility 
@@ -123,7 +123,7 @@ def today(request):
 
         'ws': wind_speed,
         'gs': gust_speed,
-        'wdi': wind_direction+"°",
+        'wdi': wind_direction,
 
         'hum': humidity,
         'pre': precipitation,
