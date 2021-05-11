@@ -19,14 +19,14 @@ def getJSONdata(l,p,u,t):
     baseURL = "https://api.tomorrow.io/v4/timelines?"
     apikey = "Tyr1EgrDSiHzz5c6MHjz5qGBlkQ8zzoq"
     location = [l[0],l[1]]
-    feilds = p
     units = str(u)
     timesteps = str(t)
     #Temporary String Initialization
     fstring = ""
-    for i in feilds:
+    for i in p:
         fstring+= str(i)+","
     finalUrl=baseURL+"location="+str(location[0])+","+str(location[1])+"&"+"fields="+fstring+"&amp;timesteps="+timesteps+"&units="+units+"&apikey="+apikey
+    print(finalUrl)
     response = requests.get(finalUrl).json()
     return response
 
