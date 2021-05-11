@@ -39,7 +39,6 @@
                                 <img src="{% static 'images/common/todayico/temp.svg' %}">
                                 <div class="tempgrid">
                                     <h2>{{th}}</h2>
-                                    <h5>{{tl}}</h5>
                                 </div>
                                 <h5 id="feelslikestemp">Feels Like: {{fl}}</h5>
                             </div>
@@ -67,7 +66,6 @@
                                 </div>
                                 <div class="winddiranddeg">
                                 <h3 id="winddirection">{{wdi}}</h5>
-                                <h5 id="winddegree">{{wde}}</h5>
                                 </div>
                             </div>
                     </div>
@@ -125,10 +123,6 @@
             </div>
 
 
-            <div class="h-box" id="unselectable">
-            <div class="box">
-                <div id="chartdiv"></div>
-            </div>
         </div>
         </div>
         
@@ -162,65 +156,9 @@
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="{% static 'js/dragscroll.js' %}"></script>
     <script src="{% static 'js/datetime.js' %}"></script>
 
-    <script>
-
-google.charts.load('current', {'packages':['line']});
-google.charts.setOnLoadCallback(drawChart);
-
-function drawChart() {
-
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'Hour');
-    data.addColumn('number', 'Temperature');
-    data.addColumn('number', 'Dew Point');
-    data.addRows(JSON.parse('{{cd|safe}}'));
-
-    var options = {
-        colors: ['#fdd835','#1e88e5'],
-        backgroundColor: "transparent",
-        chartArea: {
-            backgroundColor: 'transparent',
-            top: 20,
-        },
-        width: 1000,
-        height: 140,
-        legend: {position: 'none'},
-        animation:{
-            duration: 1000,
-            easing: 'inAndOut'
-          },
-        hAxis: {
-            textStyle: {
-              color: "#FFFFFF",
-              bold: true,
-            },
-            gridlines: {
-              color: "#FFFFFF00"
-            },
-            baselineColor: '#FFFFFF00'
-          },
-        vAxis: {
-            textStyle: {
-              color: "#FFFFFF",
-              bold: true,
-            },
-            gridlines: {
-              color: "#FFFFFF00"
-            },
-            baselineColor: '#FFFFFF00'
-          },
-    };
-
-    var chart = new google.charts.Line(document.getElementById('chartdiv'));
-    chart.draw(data, google.charts.Line.convertOptions(options));
-}
-        
-        
-    </script>
 
 </body>
 

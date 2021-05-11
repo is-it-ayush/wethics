@@ -53,19 +53,17 @@ def home(request):
 
 
 def forecast(request):
-
-
-    #g = GeoIP2()
-    #ip  = get_client_ip(request)d
-    #city = g.city(ip)['city']
-    #country = g.country_code(ip)
+    g = GeoIP2()
+    ip  = get_client_ip(request)d
+    city = g.city(ip)['city']
+    country = g.country_code(ip)
 
 
     #weather api url
     # 09f2b33e311b403386d52c018ec8bbae
 
     #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + "Lucknow" + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + "India" + "&lang=en" + "&days=16"
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
     #------------------------------------------------------------------------------------------------------
 
 
@@ -76,45 +74,35 @@ def forecast(request):
     forecast = response['data']
 
     #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
-    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': "Lucknow" + ", " + "India"})
+    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': city + ", " + country})
     #------------------------------------------------------------------------------------------------------
 
 
 def today(request):
     g = GeoIP2()
     ip  = get_client_ip(request)
-    city = g.city(ip)['city']
-    country = g.country_code(ip)
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country  + "&lang=en" + "&days=1"
-    aqiurl = 'https://api.weatherbit.io/v2.0/current/airquality?' + '&city=' + city + '&country=' + country + '&key=15b6cc7dd80e4efbbd317566c35fa74a' + "&lang=en"
-    #Response Object
-    response = requests.get(url).json()
-    aqires = requests.get(aqiurl).json()
-    #Getting 'data' feild of the objects
-    forecast = response['data'][0]
-    if requests.get(aqiurl).status_code != 200:
-        ren404(request)
-    aqid = aqires['data'][0]
+    udata = DbIpCity.get(ip, api_key='free')
+    response = getJSONdata([str(udata.latitude),str(udata.longitude)],["temperature","temperatureApparent","humidity","precipitationProbability","windSpeed","windDirection","windGust","visibility","epaIndex","epaHealthConcern","weatherCode"],"metric","current")
 
     #Temperature
-    temp_high = int(forecast['max_temp'])
-    temp_low = int(forecast['min_temp'])
-    feels_like = int(forecast['temp'])
+    temp_high = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
+    feels_like = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperatureApparent'])
     
     #Humidity and precipitation
-    precipitation = int(forecast['precip'])
-    humidity = int(forecast['rh'])
+    precipitation = int(response["data"]["timelines"][0]["intervals"][0]["values"]['precipitationProbability'])
+    humidity = int(response["data"]["timelines"][0]["intervals"][0]["values"]['humidity'])
 
     #Wind Date
-    wind_speed = int(forecast['wind_spd'])
-    gust_speed = int(forecast['wind_gust_spd'])
-    wind_direction = forecast['wind_cdir']
-    wind_degree = int(forecast['wind_dir'])
+    wind_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windSpeed'])
+    gust_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windGust'])
+    wind_direction = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windDirection'])
+
+
     #Visibility 
-    vis = int(forecast['vis'])
+    vis = int(response["data"]["timelines"][0]["intervals"][0]["values"]['visibility'])
     
     # Date 
-    valid_date = forecast['valid_date']
+    valid_date = str(response["data"]["timelines"][0]["intervals"][0]['startTime'])
     da = datesplit(valid_date)
     date = da[2]
     month = da[1]
@@ -122,32 +110,13 @@ def today(request):
 
 
     # AQI data from aqid obj
-    aqi = aqid['aqi']
-
-
-    url = 'https://api.weatherapi.com/v1/forecast.json?key=d5d9fd8eaaab4ee8be5162449210201&q=' + city + '&days=1'
-    response = requests.get(url).json()
-
-    data = response['forecast']['forecastday'][0]['hour']
-    cdata = []
-    for i in data:
-        t =i['time']
-        yeara,montha,day,hour,min = dateandtime(t)
-        o = int(hour)
-        lis = [o,converttoint(str(i['temp_c'])),converttoint(str(i['dewpoint_c']))]
-        cdata.append(lis)
-
-        # data.addRows([
-    #      [new Date(2021,1,2,0,0), 3],
-    #     [new Date(2021,1,2,1,0), 1],
-    #    [new Date(2021,1,2,2,0), 4],
+    aqi = int(response["data"]["timelines"][0]["intervals"][0]["values"]['epaIndex'])
 
     return render(request, 'today.html',{
         'bgurl': bgimg(),
-        'location': city + ", " + country, 
+        'location': udata.city + ", " + udata.country, 
 
         'th': temp_convert_to_c(temp_high),
-        'tl': temp_convert_to_c(temp_low),
         'fl': temp_convert_to_c(feels_like),
 
         'vis': vis,
@@ -155,7 +124,6 @@ def today(request):
         'ws': wind_speed,
         'gs': gust_speed,
         'wdi': wind_direction,
-        'wde': wind_degree,
 
         'hum': humidity,
         'pre': precipitation,
@@ -168,28 +136,12 @@ def today(request):
         'aqi': aqi,
         'aqi_text': aqitextre(aqi)[0],
         'aqi_text_color': aqitextre(aqi)[1],
-
-        'cd': cdata
     })
 
 
 
 
 # Helper Functions
-
-def dateandtime(t):
-    array = t.split(' ')
-    #2020-12-12
-    date = array[0]
-    #21:30
-    time = array[1]
-    #['2020','12','12']
-    datearray = date.split('-')
-    #['21','30']
-    timearray = time.split(':')
-
-    return datearray[0],datearray[1],datearray[2],timearray[0],timearray[1]
-
 
 def aqitextre(aqi):
     aqitara = ['Good', 'Moderate','Unhealthy For Sensitive Groups','Unhealty','Very Unhealthy','Hazardous']
@@ -209,8 +161,11 @@ def aqitextre(aqi):
 
 
 def datesplit(date):
-    da = date.split('-')
-    return da
+    #2019-03-20T14:09:50Z
+    f = date.split("T")
+    f = f[0]
+    f = f.split("-")
+    return f
 
 def converttoint(c):
     a = c.split('.')
