@@ -6,44 +6,89 @@ from django.http import response
 from django.http.response import HttpResponse, HttpResponseGone
 from django.shortcuts import render 
 from django.contrib.gis.geoip2 import GeoIP2
+from ip2geotools.databases.noncommercial import DbIpCity
+
 # Create your views here.
 import requests
 
 def ren404(request):
     return render(request,'404.html',{'bgurl': bgimg()})
 
+# Helper Function
+def getJSONdata(l,p,u,t):
+    baseURL = "https://api.tomorrow.io/v4/timelines?"
+    apikey = "Tyr1EgrDSiHzz5c6MHjz5qGBlkQ8zzoq"
+    location = [l[0],l[1]]
+    feilds = p
+    units = str(u)
+    timesteps = str(t)
+    #Temporary String Initialization
+    fstring = ""
+    for i in feilds:
+        fstring+= str(i)+","
+    finalUrl=baseURL+"location="+str(location[0])+","+str(location[1])+"&"+"fields="+fstring+"&amp;timesteps="+timesteps+"&units="+units+"&apikey="+apikey
+    response = requests.get(finalUrl).json()
+    return response
+
 
 def home(request):
-    g = GeoIP2()
-    ip  = get_client_ip(request)
-    city = g.city(ip)['city']
-    country = g.country_code(ip)
-    #weather api url
-    url = 'https://api.weatherapi.com/v1/current.json?key=d5d9fd8eaaab4ee8be5162449210201&q=' + city
-    #Response Object
-    response = requests.get(url).json()
-    #temperature variable
-    temp = int(response['current']['temp_c'])
-    #last updated temperature varible
-    lst_updt = response['current']['last_updated']
+    try:
+        g = GeoIP2()
+        ip  = get_client_ip(request)
+        udata = DbIpCity.get(ip, api_key='free')
+        break
+    except:
+        print("Oopsie! Crashed @home/geoIP2()")
+        ren404(request)
+        break
     
-    return render(request, 'index.html',{'location': city + ", " + country, 'temperature' : temp_convert_to_c(temp), 'weather':  response['current']['condition']['text'], 'bgurl': bgimg(), 'last_updated': lastupdated(lst_updt)})
+    response = getJSONdata([udata.latitude,udata.longitude],["temperature","weatherCode"],"metric","current")
+
+    #Helper Code [Remove at Deployment]
+    print("------------------------------------------------------------")
+    print(response['data']['timelines']['intervals']['values'])
+    print("------------------------------------------------------------")
+
+    #temperature variable
+    temp = int(response['data']['timelines']['intervals']['values']['temperature'])
+    #last updated temperature varible
+    lst_updt = str(response['data']['timelines']['intervals']['startTime'])
+    #WeatherCodeToText
+    wcode = int(response['data']['timelines']['intervals']['values']['weatherCode'])
+    wText = str(weathercode(wcode))
+
+    #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
+    return render(request, 'index.html',{'location': udata.city + ", " + udata.country, 'temperature' : temp, 'weather':  wText, 'bgurl': bgimg(), 'last_updated': lastupdated(lst_updt)})
+    #------------------------------------------------------------------------------------------------------
 
 
 
 def forecast(request):
-    g = GeoIP2()
-    ip  = get_client_ip(request)
-    city = g.city(ip)['city']
-    country = g.country_code(ip)
+
+
+    #g = GeoIP2()
+    #ip  = get_client_ip(request)
+    #city = g.city(ip)['city']
+    #country = g.country_code(ip)
+
+
     #weather api url
     # 09f2b33e311b403386d52c018ec8bbae
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
+
+    #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + "Lucknow" + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + "India" + "&lang=en" + "&days=16"
+    #------------------------------------------------------------------------------------------------------
+
+
+
     #Response Object
     response = requests.get(url).json()
     #Date Part Monday 23
     forecast = response['data']
-    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': city + ", " + country})
+
+    #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
+    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': "Lucknow" + ", " + "India"})
+    #------------------------------------------------------------------------------------------------------
 
 
 def today(request):
@@ -196,17 +241,15 @@ def bgimg():
     return bgurl
 
 def lastupdated(lst_updt):
-    # Getting the time in this format(format is from API): 25-12-2020 00:00    
-    # Splitting the string from whitespace(" ")
-    x = lst_updt.split(" ")
-    # Now in 1st indice we have got the time while in 0th indice we have date..(we dont need date) hence splitting the 1st indice again from colon
-    x = x[1].split(':')
-    #Now x=['00','00'], so checking if hour is greater than 12 and subtracting it to convert from 24 hour format to 12
-    # No need to change the minute part. 
-    if int(x[0])>=12:
-       return str(int(x[0])-12)+":"+x[1]+" P.M."
-    elif int(x[0])<12:
-       return str(int(x[0])-12)+":"+x[1]+" A.M."
+    #2019-03-20T14:09:50Z
+    f = "2019-03-20T14:09:50Z".split("T")
+    f = f[1]
+    f = f[:len(f)-4]
+    f = f.split(":")
+    if int(f[0])>=12:
+        f[0]=str(int(f[0])-12)
+    fTime = f[0]+":"+f[1]
+    return fTime
 
 
 def get_client_ip(request):
@@ -216,3 +259,35 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+def weathercode(wcode):
+    code = {
+        0: "Unknown",
+        1000: "Clear",
+        1001: "Cloudy",
+        1100: "Mostly Clear",
+        1101: "Partly Cloudy",
+        1102: "Mostly Cloudy",
+        2000: "Fog",
+        2100: "Light Fog",
+        3000: "Light Wind",
+        3001: "Wind",
+        3002: "Strong Wind",
+        4000: "Drizzle",
+        4001: "Rain",
+        4200: "Light Rain",
+        4201: "Heavy Rain",
+        5000: "Snow",
+        5001: "Flurries",
+        5100: "Light Snow",
+        5101: "Heavy Snow",
+        6000: "Freezing Drizzle",
+        6001: "Freezing Rain",
+        6200: "Light Freezing Rain",
+        6201: "Heavy Freezing Rain",
+        7000: "Ice Pellets",
+        7101: "Heavy Ice Pellets",
+        7102: "Light Ice Pellets",
+        8000: "Thunderstorm",
+    }    
+    return code.get(wcode, "Not Known")
