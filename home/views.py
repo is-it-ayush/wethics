@@ -131,7 +131,7 @@ def today(request):
         'date': date,
         'month': month,
         'year': year,
-        'day': valid_date,
+        'day': da,
 
         'aqi': aqi,
         'aqi_text': aqitextre(aqi)[0],
