@@ -25,7 +25,7 @@ def getJSONdata(l,p,u,t):
     fstring = ""
     for i in p:
         fstring+= str(i)+","
-    finalUrl=baseURL+"location="+str(location[0])+","+str(location[1])+"&"+"fields="+fstring+"&amp;timesteps="+timesteps+"&units="+units+"&apikey="+apikey
+    finalUrl=baseURL+"location="+str(location[0])+","+str(location[1])+"&"+"fields="+fstring+"&timesteps="+timesteps+"&units="+units+"&apikey="+apikey
     print(finalUrl)
     response = requests.get(finalUrl).json()
     return response
