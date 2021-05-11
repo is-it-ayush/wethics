@@ -42,17 +42,12 @@ def home(request):
     
     response = getJSONdata([udata.latitude,udata.longitude],["temperature","weatherCode"],"metric","current")
 
-    #Helper Code [Remove at Deployment]
-    print("------------------------------------------------------------")
-    print(response['data']['timelines']['intervals']['values'])
-    print("------------------------------------------------------------")
-
     #temperature variable
-    temp = int(response['data']['timelines']['intervals']['values']['temperature'])
+    temp = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
     #last updated temperature varible
-    lst_updt = str(response['data']['timelines']['intervals']['startTime'])
+    lst_updt = str(response["data"]["timelines"][0]["intervals"][0]['startTime'])
     #WeatherCodeToText
-    wcode = int(response['data']['timelines']['intervals']['values']['weatherCode'])
+    wcode = int(response["data"]["timelines"][0]["intervals"][0]["values"]['weatherCode'])
     wText = str(weathercode(wcode))
 
     #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
