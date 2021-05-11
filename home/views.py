@@ -32,17 +32,14 @@ def getJSONdata(l,p,u,t):
 
 
 def home(request):
-    try:
-        g = GeoIP2()
-        ip  = get_client_ip(request)
-        udata = DbIpCity.get(ip, api_key='free')
-    except:
-        print("Oopsie! Crashed @home/geoIP2()")
-        ren404(request)
+    g = GeoIP2()
+    ip  = get_client_ip(request)
+    udata = DbIpCity.get(ip, api_key='free')
+
     
     response = getJSONdata([str(udata.latitude),str(udata.longitude)],["temperature","weatherCode"],"metric","current")
 
-    print(str(data.latitude)+"\t"+str(udata.longitude))
+    print(str(udata.latitude)+"\t"+str(udata.longitude))
 
     #temperature variable
     temp = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
