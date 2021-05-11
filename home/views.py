@@ -42,7 +42,7 @@ def home(request):
     
     response = getJSONdata([udata.latitude,udata.longitude],["temperature","weatherCode"],"metric","current")
 
-    print(response)
+    print(udata.latitude+"\t"+udata.longitude)
 
     #temperature variable
     temp = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
