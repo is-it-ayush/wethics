@@ -123,7 +123,7 @@ def today(request):
 
         'ws': wind_speed,
         'gs': gust_speed,
-        'wdi': wind_direction,
+        'wdi': wind_direction+"°",
 
         'hum': humidity,
         'pre': precipitation,
@@ -172,7 +172,7 @@ def converttoint(c):
     return int(a[0])
 
 def temp_convert_to_c(temp):
-    return str(temp)+" ℃"
+    return str(temp)+" °C"
 
 def bgimg():
     #Actual Backgrond JSON for image
