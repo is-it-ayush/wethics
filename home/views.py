@@ -58,12 +58,9 @@ def forecast(request):
     city = g.city(ip)['city']
     country = g.country_code(ip)
 
+    print("Country = " + country)
 
-    #weather api url
-    # 09f2b33e311b403386d52c018ec8bbae
-
-    #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
+   url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
     #------------------------------------------------------------------------------------------------------
 
 
