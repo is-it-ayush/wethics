@@ -86,6 +86,7 @@ body
 .top-center h6 a
 {
     outline: 0;
+    color: rgba(227,53,53,1);
     text-decoration: none;
 }
 
@@ -160,13 +161,14 @@ body
 #forecast a
 {
     text-decoration: none;
-    color: white;
+    color: rgba(255,179,186,1);
 }
 
 #forecast:hover
 {
     transition: 0.5s ease;
     font-size: 23px;
+    color: rgba(227,53,53,1);
 }
 
 #t-info
@@ -181,12 +183,13 @@ body
 {
  
     text-decoration: none;
-    color: white;
+    color: rgba(255,179,186,1);
 }
 
 #t-info:hover
 {
     transition: 0.5s ease;
+    color: rgba(227,53,53,1);
     font-size: 23px;
 }
 
@@ -240,6 +243,10 @@ body
     {
         font-size: 15px;
         outline: none;
+    }
+    .bottom h4 a 
+    {
+        color: rgba(255,179,186,1);
     }
 }
 
