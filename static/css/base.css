@@ -167,7 +167,11 @@ body
 #forecast:hover
 {
     transition: 0.5s ease;
-    font-size: 23px;
+    font-size: 23px;   
+}
+
+#forecast a:hover
+{
     color: rgba(227,53,53,1);
 }
 
@@ -189,8 +193,11 @@ body
 #t-info:hover
 {
     transition: 0.5s ease;
-    color: rgba(227,53,53,1);
     font-size: 23px;
+}
+#t-info a:hover
+{
+    color: rgba(227,53,53,1);
 }
 
 /*------------------------------------------------------------*/
