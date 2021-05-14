@@ -56,12 +56,6 @@ def forecast(request):
     ip  = get_client_ip(request)
     udata = DbIpCity.get(ip, api_key='free')
 
-    
-    print("IP = " + ip)
-    print("City = " + city)
-    print("Country = " + country)
-
-
 
     url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + udata.city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + udata.country + "&lang=en" + "&days=16"
     #------------------------------------------------------------------------------------------------------
@@ -74,7 +68,7 @@ def forecast(request):
     forecast = response['data']
 
     #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
-    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': city + ", " + country})
+    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': udata.city + ", " + udata.country})
     #------------------------------------------------------------------------------------------------------
 
 
