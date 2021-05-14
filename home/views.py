@@ -56,7 +56,9 @@ def forecast(request):
     ip  = get_client_ip(request)
     city = g.city(ip)['city']
     country = g.country_code(ip)
-
+    
+    print("IP = " + ip)
+    print("City = " + city)
     print("Country = " + country)
 
     url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
