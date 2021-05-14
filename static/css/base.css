@@ -173,6 +173,7 @@ body
 #forecast a:hover
 {
     color: rgba(227,53,53,1);
+    transition: 0.5s ease-in-out;
 }
 
 #t-info
@@ -198,6 +199,7 @@ body
 #t-info a:hover
 {
     color: rgba(227,53,53,1);
+    transition: 0.5s ease-in-out;
 }
 
 /*------------------------------------------------------------*/
