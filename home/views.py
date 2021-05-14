@@ -1,6 +1,5 @@
 import json
 from re import template
-import re
 from typing import List
 from django.http import response
 from django.http.response import HttpResponse, HttpResponseGone
@@ -60,7 +59,7 @@ def forecast(request):
 
     print("Country = " + country)
 
-   url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + country + "&lang=en" + "&days=16"
     #------------------------------------------------------------------------------------------------------
 
 
