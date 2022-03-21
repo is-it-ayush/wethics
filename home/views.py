@@ -2,7 +2,6 @@ import os
 from django.shortcuts import render 
 from django.contrib.gis.geoip2 import GeoIP2
 from ip2geotools.databases.noncommercial import DbIpCity
-import ipinfo
 import asyncio
 from dotenv import load_dotenv
 
@@ -210,6 +209,9 @@ def format_time_from_ISO8601(lst_updt):
     # Returing the time.
     return fTime
 
+def get_access_route(request):
+    meta = request.META
+    return (meta.get('HTTP_X_FORWARDED_FOR') or meta.get('REMOTE_ADDR')).split(',')
 
 def get_client_ip(request):
     """Returns the Client IP from Request Header.
@@ -217,16 +219,29 @@ def get_client_ip(request):
     Arguement:
         request: The Request Object.
     """
-    # Gett the HTTP_X_FORWARDED_FOR request Header.
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    
-    # Return IP
-    return ip
+    access_route = get_access_route(request)
+
+    if len(access_route) == 1:
+        return access_route[0]
+    expression = """
+        (^(?!(?:[0-9]{1,3}\.){3}[0-9]{1,3}$).*$)|  # will match non valid ipV4
+        (^127\.0\.0\.1)|  # will match 127.0.0.1
+        (^10\.)|  # will match 10.0.0.0 - 10.255.255.255 IP-s
+        (^172\.1[6-9]\.)|  # will match 172.16.0.0 - 172.19.255.255 IP-s
+        (^172\.2[0-9]\.)|  # will match 172.20.0.0 - 172.29.255.255 IP-s
+        (^172\.3[0-1]\.)|  # will match 172.30.0.0 - 172.31.255.255 IP-s
+        (^192\.168\.)  # will match 192.168.0.0 - 192.168.255.255 IP-s
+    """
+    regex = re.compile(expression, re.X)
+    for ip in access_route:
+        if not ip:
+            # it's possible that the first value from X_FORWARDED_FOR
+            # will be null, so we need to pass that value
+            continue
+        if regex.search(ip):
+            continue
+        else:
+            return ip 
 
 def weathercode(wcode):
     """Returns the Weather from Weather Code.
@@ -325,10 +340,7 @@ def ip_data(request):
     # Getting the API Key.
     access_token = os.environ.get("IPINFO_KEY")
 
-    # Setting up the handler.
-    handler = ipinfo.getHandler(access_token)
-
     # Getting the Data from IPInfo
-    data = requests.get("https://ipinfo.io/"+str(get_client_ip(requests))+"?token="+str(access_token)).json()
+    data = requests.get("https://ipinfo.io/"+str(get_client_ip(request))+"?token="+str(access_token)).json()
     print(data)
     return data
