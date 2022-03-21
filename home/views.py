@@ -330,5 +330,5 @@ def ip_data(request):
     
     # Getting the Data from IPInfo
     data = handler.getDetails()
-
+    print(data)
     return data
