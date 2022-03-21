@@ -327,10 +327,8 @@ def ip_data(request):
 
     # Setting up the handler.
     handler = ipinfo.getHandler(access_token)
-    
-    print(os.environ.get("IPINFO_KEY"))
-    print(handler)
 
     # Getting the Data from IPInfo
-    data = handler.getDetails(get_client_ip(request))
+    data = requests.get("https://ipinfo.io/"+str(get_client_ip(requests))+"?token="+str(access_token)).json()
+    print(data)
     return data
