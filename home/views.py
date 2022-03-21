@@ -332,5 +332,5 @@ def ip_data(request):
     print(handler)
 
     # Getting the Data from IPInfo
-    data = handler.getDetails()
+    data = handler.getDetails(get_client_ip(request))
     return data
