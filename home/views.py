@@ -1,202 +1,240 @@
-import json
-from re import template
-from typing import List
-from django.http import response
-from django.http.response import HttpResponse, HttpResponseGone
+import os
 from django.shortcuts import render 
 from django.contrib.gis.geoip2 import GeoIP2
 from ip2geotools.databases.noncommercial import DbIpCity
+import ipinfo
+import asyncio
+from dotenv import load_dotenv
 
 # Create your views here.
 import requests
 
-def ren404(request):
-    return render(request,'404.html',{'bgurl': bgimg()})
-
-# Helper Function
-def getJSONdata(l,p,u,t):
-    baseURL = "https://api.tomorrow.io/v4/timelines?"
-    apikey = "Tyr1EgrDSiHzz5c6MHjz5qGBlkQ8zzoq"
-    location = [l[0],l[1]]
-    units = str(u)
-    timesteps = str(t)
-    #Temporary String Initialization
-    fstring = ""
-    for i in p:
-        fstring+= str(i)+","
-    finalUrl=baseURL+"location="+str(location[0])+","+str(location[1])+"&"+"fields="+fstring+"&timesteps="+timesteps+"&units="+units+"&apikey="+apikey
-    response = requests.get(finalUrl).json()
-    return response
-
-
 def home(request):
-    g = GeoIP2()
-    ip  = get_client_ip(request)
-    udata = DbIpCity.get(ip, api_key='free')
-
+    """Renders the landing page of Wethics Application.
     
-    response = getJSONdata([str(udata.latitude),str(udata.longitude)],["temperature","weatherCode"],"metric","current")
+    Arguements:
+        request: The Request object.
+    """
+    #Loading the .env file with environemnt variables.
+    load_dotenv()
 
-    #temperature variable
-    temp = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
-    #last updated temperature varible
-    lst_updt = str(response["data"]["timelines"][0]["intervals"][0]['startTime'])
-    #WeatherCodeToText
-    wcode = int(response["data"]["timelines"][0]["intervals"][0]["values"]['weatherCode'])
-    wText = str(weathercode(wcode))
+    # Getting the request data.
+    data = ip_data(request)
 
-    #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
-    return render(request, 'index.html',{'location': udata.city + ", " + udata.country, 'temperature' : temp_convert_to_c(temp), 'weather':  wText, 'bgurl': bgimg(), 'last_updated': lastupdated(lst_updt)})
-    #------------------------------------------------------------------------------------------------------
+    # Setting up the response.
+    parameters = ["temperature","weatherCode"]
+    unit = "metric"
+    timestep = "current"
 
+    # Getting the resposne of current data.
+    response = getJSONdata(data,parameters,unit,timestep)
+
+    # Getting the tempearature from response (Response is a JSON)
+    temperature = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
+    # Getting the time when the current data was Updated.
+    last_updated = str(response["data"]["timelines"][0]["intervals"][0]['startTime'])
+    # Getting the weather code and its respective text.
+    weather_code = int(response["data"]["timelines"][0]["intervals"][0]["values"]['weatherCode'])
+    weather_code_text = str(weathercode(weather_code))
+
+    # Render the Index Page
+    return render(request, 'index.html',{'location': data.city + ", " + data.country_name , 'temperature' : add_celsius_symbol(temperature), 'weather':  weather_code_text, 'bgurl': bgimg(), 'last_updated': format_time_from_ISO8601(last_updated)})
+  
 
 
 def forecast(request):
-    g = GeoIP2()
-    ip  = get_client_ip(request)
-    udata = DbIpCity.get(ip, api_key='free')
+    """Renders the forecast page with weather forecast of upto 16 days.
 
+    Arguement:
+        reuqest: The Request Object.
+    """
+    #Loading the .env file with environemnt variables.
+    load_dotenv()
 
-    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + udata.city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + udata.country + "&lang=en" + "&days=16"
-    #------------------------------------------------------------------------------------------------------
+    # Getting the request data.
+    data = ip_data(request)
 
+    # Getting the URL to fetch from API.
+    url = 'https://api.weatherbit.io/v2.0/forecast/daily?city=' + data.city + "&key=15b6cc7dd80e4efbbd317566c35fa74a" + "&country=" + data.country + "&lang=en" + "&days=16"
 
-
-    #Response Object
+    # Fetching and storing it in response as a JSON.
     response = requests.get(url).json()
-    #Date Part Monday 23
+    
+    # Getting our forecast of next 16 Days.
     forecast = response['data']
 
-    #DEPLOYMENT EDIT IMPORTANT ----- Change "lucknow" to city and "India" to country
-    return render(request,'forecast.html',{'bgurl': bgimg(),'days': forecast, 'location': udata.city + ", " + udata.country})
-    #------------------------------------------------------------------------------------------------------
+    # Rendering our forecast page with the now available variables.
+    return render(request,'forecast.html',{'bgurl': bgimg(), 'days': forecast, 'location': data.city + ", " + data.country_name})
 
 
 def today(request):
-    g = GeoIP2()
-    ip  = get_client_ip(request)
-    udata = DbIpCity.get(ip, api_key='free')
-    response = getJSONdata([str(udata.latitude),str(udata.longitude)],["temperature","temperatureApparent","humidity","precipitationProbability","windSpeed","windDirection","windGust","visibility","epaIndex","epaHealthConcern","weatherCode"],"metric","current")
+    """Renders the today page with extra information about today.
 
-    #Temperature
-    temp_high = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature'])
-    feels_like = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperatureApparent'])
+    Arguement:
+        reuqest: The Request Object.
+    """
+
+    #Loading the .env file with environemnt variables.
+    load_dotenv()
+
+    # Getting the request data.
+    data = ip_data(request)
     
-    #Humidity and precipitation
-    precipitation = int(response["data"]["timelines"][0]["intervals"][0]["values"]['precipitationProbability'])
-    humidity = int(response["data"]["timelines"][0]["intervals"][0]["values"]['humidity'])
+    # Setting up the response.
+    parameters = ["temperature","temperatureApparent","humidity","precipitationProbability","windSpeed","windDirection","windGust","visibility","epaIndex","epaHealthConcern","weatherCode"]
+    unit = "metric"
+    timestep = "current"
 
-    #Wind Date
-    wind_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windSpeed'])
-    gust_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windGust'])
-    wind_direction = str(response["data"]["timelines"][0]["intervals"][0]["values"]['windDirection'])+"°"
+    # Getting the resposne of current data.
+    response = getJSONdata(data,parameters,unit,timestep)
 
+    # Setting up our various required variables which will be passed later to page.
+    temp_high = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperature']) # HighestTemperature.
+    feels_like = int(response["data"]["timelines"][0]["intervals"][0]["values"]['temperatureApparent']) # The current felt temperature.
+    precipitation = int(response["data"]["timelines"][0]["intervals"][0]["values"]['precipitationProbability']) # The Precipitation.
+    humidity = int(response["data"]["timelines"][0]["intervals"][0]["values"]['humidity']) # The humidity of the day.
+    wind_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windSpeed']) # The Wind Speed.
+    gust_speed = int(response["data"]["timelines"][0]["intervals"][0]["values"]['windGust']) # The Gust Speed.
+    wind_direction = str(response["data"]["timelines"][0]["intervals"][0]["values"]['windDirection'])+"°" # The Direction of Wind.
+    vis = int(response["data"]["timelines"][0]["intervals"][0]["values"]['visibility']) # The Visibility of the day.    
+    aqi = int(response["data"]["timelines"][0]["intervals"][0]["values"]['epaIndex']) # The AQI Data
 
-    #Visibility 
-    vis = int(response["data"]["timelines"][0]["intervals"][0]["values"]['visibility'])
-    
-    # Date 
-    valid_date = str(response["data"]["timelines"][0]["intervals"][0]['startTime'])
-    da = datesplit(valid_date)
-    date = da[2]
-    month = da[1]
-    year =  da[0]
+    valid_date = datesplit(str(response["data"]["timelines"][0]["intervals"][0]['startTime'])) # The Splitted date array.
+    date = valid_date[2] # The Date
+    month = valid_date[1] # The Month
+    year =  valid_date[0] # The Year
 
-
-    # AQI data from aqid obj
-    aqi = int(response["data"]["timelines"][0]["intervals"][0]["values"]['epaIndex'])
-
+    # Rendering the page with the now available data.
     return render(request, 'today.html',{
         'bgurl': bgimg(),
-        'location': udata.city + ", " + udata.country, 
-
-        'th': temp_convert_to_c(temp_high),
-        'fl': temp_convert_to_c(feels_like),
-
+        'location': data.city + ", " + data.country_name, 
+        'th': add_celsius_symbol(temp_high),
+        'fl': add_celsius_symbol(feels_like),
         'vis': vis,
-
         'ws': wind_speed,
         'gs': gust_speed,
         'wdi': wind_direction,
-
         'hum': humidity,
         'pre': precipitation,
-
         'date': date,
         'month': month,
         'year': year,
-        'day': da,
-
+        'day': valid_date,
         'aqi': aqi,
-        'aqi_text': aqitextre(aqi)[0],
-        'aqi_text_color': aqitextre(aqi)[1],
+        'aqi_text': aqi_helper_function(aqi)[0],
+        'aqi_text_color': aqi_helper_function(aqi)[1],
     })
-
-
 
 
 # Helper Functions
 
-def aqitextre(aqi):
-    aqitara = ['Good', 'Moderate','Unhealthy For Sensitive Groups','Unhealty','Very Unhealthy','Hazardous']
+def aqi_helper_function(aqi):
+    """Returns the AQI Warning Level from aqi data & its respective color.
+    
+    Arguement:
+        aqi: The AQI Data Object.
+    """
+    # The AQI Warning Level
+    warning_level = ['Good', 'Moderate','Unhealthy For Sensitive Groups','Unhealty','Very Unhealthy','Hazardous']
+    
+    # The Color that goes with the warning level.
     color = ['#009966', '#ffde33','#ff9933','#cc0033','#660099','#7e0023']
+
+    # Bad Code Writing (Issue Aware)
     if aqi>=0 and aqi<=50:
-        return aqitara[0],color[0]
+        return warning_level[0],color[0]
     if aqi>=51 and aqi<=100:
-        return aqitara[1],color[1]
+        return warning_level[1],color[1]
     if aqi>=101 and aqi<=150:
-        return aqitara[2],color[2]
+        return warning_level[2],color[2]
     if aqi>=151 and aqi<=200:
-        return aqitara[3],color[3]
+        return warning_level[3],color[3]
     if aqi>=201 and aqi<=300:
-        return aqitara[4],color[4]
+        return warning_level[4],color[4]
     if aqi>300:
-        return aqitara[5],color[5]
+        return warning_level[5],color[5]
 
 
 def datesplit(date):
-    #2019-03-20T14:09:50Z
+    """Returns the Date from ISO8601 Format
+    
+    Arguement:
+        date: Date in ISO8601 Format
+    """
     f = date.split("T")
     f = f[0]
     f = f.split("-")
     return f
 
-def converttoint(c):
-    a = c.split('.')
-    return int(a[0])
-
-def temp_convert_to_c(temp):
+def add_celsius_symbol(temp):
+    """Adds the °C symbol and returns in String
+    
+    Arguement:
+        temp: Temperature.
+    """
     return str(temp)+" °C"
 
 def bgimg():
-    #Actual Backgrond JSON for image
+    """Returns the Background URL from BING."""
+
+    # The URL To Retrieve from.
     bgurl = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1'
-    #getting the json via GET method
+    
+    # Getting the JSON.
     bg = requests.get(bgurl).json()
-    #processing json/getting image ur from json
+    
+    # Getting the Image URL from JSON.
     bgurl = 'https://bing.com'+bg['images'][0]['url']
-    #returning background url 
+    
+    # Returning the Image URL
     return bgurl
 
-def lastupdated(lst_updt):
-    #2019-03-20T14:09:50Z
+def format_time_from_ISO8601(lst_updt):
+    """Returns the Date from ISO8601 Format
+    
+    Arguement:
+        lst_updt: The Last Updaed Time.
+    """
+    # Slicing the format.
     f = lst_updt.split("T")
     f = f[1]
     f = f[:len(f)-4]
     f = f.split(":")
-    fTime = f[0]+":"+f[1]
+    
+    # Converting from 24 hours to 12 Hour's.
+    if int(f[0]) >= 12:
+        fTime = str(int(f[0])-12)+":"+f[1]+ " pm"
+    elif int(f[0]) < 12:
+        fTime = f[0]+":"+f[1] + " am"
+    
+    # Returing the time.
     return fTime
 
 
 def get_client_ip(request):
+    """Returns the Client IP from Request Header.
+    
+    Arguement:
+        request: The Request Object.
+    """
+    # Gett the HTTP_X_FORWARDED_FOR request Header.
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
     else:
         ip = request.META.get('REMOTE_ADDR')
+    
+    # Return IP
     return ip
 
 def weathercode(wcode):
+    """Returns the Weather from Weather Code.
+    
+    Arguement:
+        wcode: The Weather Code.
+    """
+    # The Code List with their Respective Weathers.
     code = {
         0: "Unknown",
         1000: "Clear",
@@ -225,5 +263,72 @@ def weathercode(wcode):
         7101: "Heavy Ice Pellets",
         7102: "Light Ice Pellets",
         8000: "Thunderstorm",
-    }    
+    }
+    
+    # Return if exists, else return Not Known.
     return code.get(wcode, "Not Known")
+
+
+
+def render_error(request,code):
+    """Renders the Error Page with the specified request and code.
+    
+    Arguement
+        request: The request object.
+        code: The Error Code
+    """
+    return render(request,'404.html',{'bgurl': bgimg(),"error_code": code})
+
+# Helper Function
+def getJSONdata(data,parameters,unit,timestep):
+    """Returns the Weather Data from the following arguements.
+    
+    Arguements:
+        location: Location Array. Where [0] is latitude, and [1] is longitude.
+        p: Requested Parameters
+        u: The Unit in which the data will be returned
+    """
+    # The Base URL for the Tommorow API Request.
+    baseURL = "https://api.tomorrow.io/v4/timelines?"
+    
+    # Getting the API Key
+    apikey = os.environ.get("TOMMOROW_API")
+
+    # Setting up a unit variable.
+    units = str(unit)
+    
+    # Setting up the timesteps
+    timesteps = str(timestep)
+
+    # Formatting feilds to be used in the RequestURL from the requested parameters array.
+    fstring = ""
+    for i in parameters:
+        fstring+= str(i)+","
+
+    # Finalizing the Request URL
+    # Format:
+    # finalurl = base + location + fields + timesteps + units + apiKey 
+    finalUrl = baseURL + "location=" + data.latitude + "," + data.longitude + "&" + "fields=" + fstring + "&timesteps=" + timesteps + "&units=" + units + "&apikey=" + apikey
+
+    # Getting the response.
+    response = requests.get(finalUrl).json()
+
+    # Returns the response.
+    return response
+
+def ip_data(request):
+    """Returns the information from a specific ip extracted from request header.
+    
+    Arguement:
+        reuqest: The Request Object.
+    """
+    # Getting the API Key.
+    access_token = os.environ.get("IPINFO_KEY")
+
+    # Setting up the handler.
+    handler = ipinfo.getHandler(access_token)
+    
+    # Getting the Data from IPInfo
+    data = handler.getDetails()
+
+    return data
