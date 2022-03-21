@@ -5,6 +5,8 @@ from ip2geotools.databases.noncommercial import DbIpCity
 import asyncio
 from dotenv import load_dotenv
 
+import ipinfo
+
 # Create your views here.
 import requests
 
@@ -340,7 +342,11 @@ def ip_data(request):
     # Getting the API Key.
     access_token = os.environ.get("IPINFO_KEY")
 
-    # Getting the Data from IPInfo
-    data = requests.get("https://ipinfo.io/"+str(get_client_ip(request))+"?token="+str(access_token)).json()
-    print(data)
+    handler = ipinfo.getHandler(access_token)
+    data = handler.getDetails(get_client_ip(request))
+
+    # # Getting the Data from IPInfo
+    # data = requests.get("https://ipinfo.io/"+str(get_client_ip(request))+"?token="+str(access_token)).json()
+    # print(data)
+
     return data
