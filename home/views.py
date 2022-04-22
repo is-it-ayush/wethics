@@ -1,8 +1,5 @@
 import os
 from django.shortcuts import render 
-from django.contrib.gis.geoip2 import GeoIP2
-from ip2geotools.databases.noncommercial import DbIpCity
-import asyncio
 from dotenv import load_dotenv
 
 import ipinfo

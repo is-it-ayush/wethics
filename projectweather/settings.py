@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
-    'geoip2',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ipinfo_django.middleware.IPinfo',
 ]
 
 ROOT_URLCONF = 'projectweather.urls'
@@ -125,10 +123,3 @@ STATIC_URL = '/static/'
 
 GEOIP_PATH = BASE_DIR / 'databases'
 
-IPINFO_TOKEN = '912338ac8f0e8b'
-IPINFO_SETTINGS = {
-    'cache_options': {
-        'ttl':30,
-        'maxsize': 128
-    },
-}
