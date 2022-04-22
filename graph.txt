@@ -1,0 +1,103 @@
+aiohttp==3.7.3
+  - async-timeout [required: >=3.0,<4.0, installed: 3.0.1]
+  - attrs [required: >=17.3.0, installed: 20.3.0]
+  - chardet [required: >=2.0,<4.0, installed: 3.0.4]
+  - multidict [required: >=4.5,<7.0, installed: 5.1.0]
+  - typing-extensions [required: >=3.6.5, installed: 4.2.0]
+  - yarl [required: >=1.0,<2.0, installed: 1.6.3]
+    - idna [required: >=2.0, installed: 2.10]
+    - multidict [required: >=4.0, installed: 5.1.0]
+autopep8==1.5.7
+  - pycodestyle [required: >=2.7.0, installed: 2.7.0]
+  - toml [required: Any, installed: 0.10.2]
+boto==2.49.0
+dicttoxml==1.7.4
+Django==3.1.4
+  - asgiref [required: >=3.2.10,<4, installed: 3.3.1]
+  - pytz [required: Any, installed: 2020.5]
+  - sqlparse [required: >=0.2.2, installed: 0.4.1]
+django-google-charts==0.1.1
+django-ip-geolocation==1.6.0
+  - requests [required: >=1.0.4, installed: 2.25.1]
+    - certifi [required: >=2017.4.17, installed: 2020.12.5]
+    - chardet [required: >=3.0.2,<5, installed: 3.0.4]
+    - idna [required: >=2.5,<3, installed: 2.10]
+    - urllib3 [required: >=1.21.1,<1.27, installed: 1.26.2]
+django-ipware==3.0.2
+django-qsstats-magic==1.1.0
+geocoder==1.38.1
+  - click [required: Any, installed: 7.1.2]
+  - future [required: Any, installed: 0.18.2]
+  - ratelim [required: Any, installed: 0.1.6]
+    - decorator [required: Any, installed: 5.0.7]
+  - requests [required: Any, installed: 2.25.1]
+    - certifi [required: >=2017.4.17, installed: 2020.12.5]
+    - chardet [required: >=3.0.2,<5, installed: 3.0.4]
+    - idna [required: >=2.5,<3, installed: 2.10]
+    - urllib3 [required: >=1.21.1,<1.27, installed: 1.26.2]
+  - six [required: Any, installed: 1.15.0]
+gunicorn==20.0.4
+  - setuptools [required: >=3.0, installed: 62.1.0]
+ipinfo==3.0.0
+  - cachetools [required: Any, installed: 4.2.0]
+  - requests [required: Any, installed: 2.25.1]
+    - certifi [required: >=2017.4.17, installed: 2020.12.5]
+    - chardet [required: >=3.0.2,<5, installed: 3.0.4]
+    - idna [required: >=2.5,<3, installed: 2.10]
+    - urllib3 [required: >=1.21.1,<1.27, installed: 1.26.2]
+  - six [required: Any, installed: 1.15.0]
+maxminddb==2.0.3
+pip-review==1.1.0
+  - packaging [required: Any, installed: 21.3]
+    - pyparsing [required: >=2.0.2,!=3.0.5, installed: 2.4.7]
+  - pip [required: Any, installed: 22.0.4]
+pylint==2.8.2
+  - astroid [required: >=2.5.6,<2.7, installed: 2.5.6]
+    - lazy-object-proxy [required: >=1.4.0, installed: 1.6.0]
+    - wrapt [required: >=1.11,<1.13, installed: 1.12.1]
+  - colorama [required: Any, installed: 0.4.4]
+  - isort [required: >=4.2.5,<6, installed: 5.8.0]
+  - mccabe [required: >=0.6,<0.7, installed: 0.6.1]
+  - toml [required: >=0.7.1, installed: 0.10.2]
+pyquery==1.4.3
+  - cssselect [required: >0.7.9, installed: 1.1.0]
+  - lxml [required: >=2.1, installed: 4.6.3]
+python-dateutil==2.8.1
+  - six [required: >=1.5, installed: 1.15.0]
+python-dotenv==0.19.2
+selenium==3.141.0
+  - urllib3 [required: Any, installed: 1.26.2]
+twine==3.4.1
+  - colorama [required: >=0.4.3, installed: 0.4.4]
+  - importlib-metadata [required: >=3.6, installed: 4.0.1]
+    - zipp [required: >=0.5, installed: 3.4.1]
+  - keyring [required: >=15.1, installed: 23.0.1]
+    - importlib-metadata [required: >=3.6, installed: 4.0.1]
+      - zipp [required: >=0.5, installed: 3.4.1]
+    - pywin32-ctypes [required: !=0.1.1,!=0.1.0, installed: 0.2.0]
+  - pkginfo [required: >=1.4.2, installed: 1.7.0]
+  - readme-renderer [required: >=21.0, installed: 29.0]
+    - bleach [required: >=2.1.0, installed: 3.3.0]
+      - packaging [required: Any, installed: 21.3]
+        - pyparsing [required: >=2.0.2,!=3.0.5, installed: 2.4.7]
+      - six [required: >=1.9.0, installed: 1.15.0]
+      - webencodings [required: Any, installed: 0.5.1]
+    - docutils [required: >=0.13.1, installed: 0.17.1]
+    - Pygments [required: >=2.5.1, installed: 2.9.0]
+    - six [required: Any, installed: 1.15.0]
+  - requests [required: >=2.20, installed: 2.25.1]
+    - certifi [required: >=2017.4.17, installed: 2020.12.5]
+    - chardet [required: >=3.0.2,<5, installed: 3.0.4]
+    - idna [required: >=2.5,<3, installed: 2.10]
+    - urllib3 [required: >=1.21.1,<1.27, installed: 1.26.2]
+  - requests-toolbelt [required: >=0.8.0,!=0.9.0, installed: 0.9.1]
+    - requests [required: >=2.0.1,<3.0.0, installed: 2.25.1]
+      - certifi [required: >=2017.4.17, installed: 2020.12.5]
+      - chardet [required: >=3.0.2,<5, installed: 3.0.4]
+      - idna [required: >=2.5,<3, installed: 2.10]
+      - urllib3 [required: >=1.21.1,<1.27, installed: 1.26.2]
+  - rfc3986 [required: >=1.4.0, installed: 1.5.0]
+  - tqdm [required: >=4.14, installed: 4.60.0]
+typed-ast==1.4.3
+waitress==1.4.4
+whitenoise==5.2.0
