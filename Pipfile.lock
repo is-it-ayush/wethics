@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fa197bc73c6144a799a471bae08c4bdb7e73bb5983ec57ca16bb0117df7c4d17"
+            "sha256": "d2d1f62857011095d435ceadc1fd045aa98498bdaa93264df739114830368731"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -236,21 +236,6 @@
             ],
             "index": "pypi",
             "version": "==1.38.1"
-        },
-        "geoip2": {
-            "hashes": [
-                "sha256:57d8d15de2527e0697bbef44fc16812bba709f03a07ef99297bd56c1df3b1efd",
-                "sha256:707025542ef076bd8fd80e97138bebdb7812527b2a007d141a27ad98b0370fff"
-            ],
-            "index": "pypi",
-            "version": "==4.1.0"
-        },
-        "geolocation-python": {
-            "hashes": [
-                "sha256:550c6f59ff7e97b2bdfe8e7731994a7b622ba8adb223b3425137b8b2ff08eeb8"
-            ],
-            "index": "pypi",
-            "version": "==0.2.2"
         },
         "gunicorn": {
             "hashes": [
