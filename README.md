@@ -1,5 +1,6 @@
 # Wethics
-visit [wethics.isitayush.dev](https://wethics.isitayush.dev/)
+
+> Visit: [wethics.isitayush.dev](https://wethics.isitayush.dev/)
 
 ![image](https://user-images.githubusercontent.com/36449128/204682693-71351ab7-0d34-4742-bbb9-70fb05244fe8.png)
 
